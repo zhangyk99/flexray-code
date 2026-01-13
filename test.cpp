@@ -87,7 +87,7 @@ int main(){
     fr_config.channelASymbolTransmitted = 1;
     fr_config.channelBSymbolTransmitted = 1;
     fr_config.ALLOW_HALT_DUE_TO_CLOCK = 1;
-    fr_config.SINGLE_SLOT_ENABLED = 0;
+//    fr_config.SINGLE_SLOT_ENABLED = 0;
     fr_config.wake_up_idx = 0;
     fr_config.ALLOW_PASSIVE_TO_ACTIVE = 2;
     fr_config.COLD_START_ATTEMPTS = 10;
@@ -182,9 +182,8 @@ int main(){
 //    ret = tsflexray_register_event_flexray_whandle(handle, &flexray_rx_event);
 //    ret = tsflexray_register_event_flexray_whandle(handle1, &flexray_rx_event);
 
-    ret = tsflexray_start_net(handle, 0, 3000);
-    ret = tsflexray_start_net(handle1, 1, 3000);
-    std::cout << ret << std::endl;
+    std::cout << "flexray start net, result: " << tsflexray_start_net(handle, 0, 3000) << std::endl;
+    std::cout << "flexray start net, result: " << tsflexray_start_net(handle1, 1, 3000) << std::endl;
 
     FlexRayFrameConfig frFrame0;
     frFrame0.FIdxChn = 0;
@@ -280,16 +279,17 @@ int main(){
 //    }
 
     for (int i = 0; i < 10; i++) {
-        std::cout << "send round: " << i << "\n" << std::endl;
+        std::cout << std::endl;
+        std::cout << "send round: " << i << std::endl;
         std::cout << "send result: " << tsflexray_transmit_sync(handle, &frFrame0, 100) << std::endl;
         std::cout << "send result: " << tsflexray_transmit_sync(handle, &frFrame2, 100) << std::endl;
         std::cout << "send result: " << tsflexray_transmit_sync(handle, &frFrame4, 100) << std::endl;
-        std::cout << "send result: " << tsflexray_transmit_sync(handle, &frFrame1, 100) << std::endl;
-        std::cout << "send result: " << tsflexray_transmit_sync(handle, &frFrame3, 100) << std::endl;
-        std::cout << "send result: " << tsflexray_transmit_sync(handle, &frFrame5, 100) << std::endl;
+        std::cout << "send result: " << tsflexray_transmit_sync(handle1, &frFrame1, 100) << std::endl;
+        std::cout << "send result: " << tsflexray_transmit_sync(handle1, &frFrame3, 100) << std::endl;
+        std::cout << "send result: " << tsflexray_transmit_sync(handle1, &frFrame5, 100) << std::endl;
 
 #ifdef _WIN32
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 #else
         usleep(100000);
 #endif

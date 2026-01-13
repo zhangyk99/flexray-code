@@ -65,12 +65,20 @@ namespace TosunFlexRay {
         char manufacturer[100];
         char product[100];
         char serial[100];
+        char dvcName[100];
         char *pManufacturer = manufacturer;
         char *pProduct = product;
         char *pSerial = serial;
+        char *pDvcName = dvcName;
+        int32_t dvcType = 0;
+        int32_t canCounts = 0;
+        bool isFD = false;
+        int32_t linCounts = 0;
+        int32_t frCounts = 0;
+        int32_t ethCounts = 0;
         size_t handle;
         for (uint32_t i = 0; i < deviceCount; i++) {
-            if (tscan_get_device_info(i, &pManufacturer, &pProduct, &pSerial)) {
+            if (tscan_get_device_info_detail(i, &pManufacturer, &pProduct, &pSerial, &dvcType, &pDvcName, &canCounts, &isFD, &linCounts, &frCounts, &ethCounts)) {
                 Log(isLog, "error", "Init", "tscan_get_device_info", "device number is:", i);
                 return FLEXRAY_ERROR_GET_DEVICE_INFO;
             }
@@ -78,13 +86,13 @@ namespace TosunFlexRay {
                 Log(isLog, "errpr", "Init", "tscan_connect", "device number is:", i);
                 return FLEXRAY_ERROR_DEVICE_CONNECT;
             }
-            int32_t count = 0;
-            if (tscan_get_flexray_channel_count(handle, &count)) {
-                Log(isLog, "error", "Init", "tscan_get_flexray_channel_count");
-                return FLEXRAY_ERROR_GET_FLEXARY_CHANNEL;
-            }
-            if (count) {
-                channelCount.emplace_back(count);
+//            int32_t count = 0;
+//            if (tscan_get_flexray_channel_count(handle, &count)) {
+//                Log(isLog, "error", "Init", "tscan_get_flexray_channel_count");
+//                return FLEXRAY_ERROR_GET_FLEXARY_CHANNEL;
+//            }
+            if (frCounts) {
+                channelCount.emplace_back(frCounts);
                 handleList.push_back(handle);
             } else {
                 if (tscan_disconnect_by_handle(handle)) {
@@ -219,7 +227,11 @@ namespace TosunFlexRay {
             f.MACRO_INITIAL_OFFSET_B = ecuConfig->MacroInitialOffsetB;
             f.MICRO_INITIAL_OFFSET_A = ecuConfig->MicroInitialOffsetA;
             f.MICRO_INITIAL_OFFSET_B = ecuConfig->MircoInitialOffsetB;
+#ifdef _WIN32
+            f.single_SLOT_ENABLED = ecuConfig->SingleSlotEnabled;
+#else
             f.SINGLE_SLOT_ENABLED = ecuConfig->SingleSlotEnabled;
+#endif
 //            f.MicroTick = 0.025000;
 
             f.config_byte = 0x3c;                                   //set target value

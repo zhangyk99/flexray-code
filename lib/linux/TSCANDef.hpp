@@ -1,4 +1,4 @@
-﻿#ifndef __LIBTSCAN_H
+#ifndef __LIBTSCAN_H
 #define __LIBTSCAN_H
 
 #include <stdint.h>
@@ -508,7 +508,7 @@ typedef struct _TFlexRayErrorEventCycloneII {
                                //                Bits 12..15 > Sync frames odd on channel A
                                //                Bits 16..19 > Sync frames odd on channel B
 	                           // error packet = 11..15
-	                           //                LOW - uint16_t of mData[1] > FlexRayChannel
+	                           //                LOW - uint16_t of mData[1] > Channel
 	                           //                HI - uint16_t of mData[1] > Slot count
 } TFlexRayErrorEventCycloneII;
 typedef struct _TFlexRayErrorEventBUSDOCTOR {
@@ -555,10 +555,10 @@ typedef struct _TFlexRayErrorEventBUSDOCTOR {
                                //                 0x00000800 Message Handler Constraints Flag data from MHDF (internal ERay error)
                                //                 0x00010000 Error Detection on channel A, data from ACS
                                //                 0x00020000 Latest Transmit Violation on channel A
-                               //                 0x00040000 Transmit Across Boundary on FlexRayChannel A
+                               //                 0x00040000 Transmit Across Boundary on Channel A
                                //                 0x01000000 Error Detection on channel B, data from ACS
                                //                 0x02000000 Latest Transmit Violation on channel B
-                               //                 0x04000000 Transmit Across Boundary on FlexRayChannel B
+                               //                 0x04000000 Transmit Across Boundary on Channel B
 } TFlexRayErrorEventBUSDOCTOR;
 typedef struct _TFlexRayErrorEventVN {
 	u8   FErrorTag;
@@ -667,8 +667,8 @@ typedef struct _TLibFlexray_controller_config {
         // __ succ1Config
     u8 channelAConnectedNode;      // Enable ChannelA: 0: Disable 1: Enable
     u8 channelBConnectedNode;      // Enable ChannelB: 0: Disable 1: Enable
-    u8 channelASymbolTransmitted; // Enable Symble Transmit function of FlexRayChannel A: 0: Disable 1: Enable
-    u8 channelBSymbolTransmitted; // Enable Symble Transmit function of FlexRayChannel B: 0: Disable 1: Enable
+    u8 channelASymbolTransmitted; // Enable Symble Transmit function of Channel A: 0: Disable 1: Enable
+    u8 channelBSymbolTransmitted; // Enable Symble Transmit function of Channel B: 0: Disable 1: Enable
     u8 ALLOW_HALT_DUE_TO_CLOCK;
     u8 SINGLE_SLOT_ENABLED;        // FALSE_0, TRUE_1
     u8 wake_up_idx;                // Wake up channe: 0:ChannelA�� 1:ChannelB
@@ -742,7 +742,7 @@ typedef struct _TLibFlexray_controller_config {
 typedef struct _TLibTrigger_def {
     u16 slot_id;
     u8 frame_idx;
-    u8 cycle_code;//BASE-Cycle + Cycle-REPETITION
+    u8 cycle_code;//BASE-CYCLE + CYCLE-REPETITION
     u8 config_byte;
     //bit 0:�Ƿ�ʹ��ͨ��A
     //bit 1:�Ƿ�ʹ��ͨ��B
@@ -863,7 +863,7 @@ extern "C" u32 tscan_transmit_can_async(const size_t ADeviceHandle, const TLibCA
 
 //Configuration of can baudrate
 //ADeviceHandle:[In] Device Handle;
-//AChnIdx:[In] FlexRayChannel Index
+//AChnIdx:[In] Channel Index
 //ARateKbps:[In] Baudrate(kbps), such as 500 means 500kbps
 //A120OhmConnected:[In] Enable internal 120O terminal resistor
 extern "C" u32 tscan_config_can_by_baudrate(const size_t ADeviceHandle, const APP_CHANNEL AChnIdx, const double ARateKbps, const u32 A120OhmConnected);
@@ -897,7 +897,7 @@ extern "C" u32 tscan_delete_cyclic_msg_canfd(const size_t ADeviceHandle, const P
 
 //Configuration of canfd baudrate
 //ADeviceHandle:[In] Device Handle;
-//AChnIdx:[In] FlexRayChannel Index
+//AChnIdx:[In] Channel Index
 //AArbRateKbps:[In] Baudrate(kbps) of arb, such as 500 means 500kbps
 //ADataRateKbps:[In] Baudrate(kbps) of data, such as 2000 means 2000kbps
 //AControllerType[In]: Controller type: classic CAN, ISO-FDCAN, NoISO-FDCAN
@@ -942,8 +942,8 @@ extern "C" u32 tsfifo_read_flexray_rx_buffer_frame_count(const size_t ADeviceHan
 
 
 //LINC hannel
-//ADeviceHandle[In]:Device FlexRayChannel��
-//AChnIdx[In]:FlexRayChannel of device;
+//ADeviceHandle[In]:Device Channel��
+//AChnIdx[In]:Channel of device;
 //AFunctionType[In]: funtion type of LIN Node, 0:MasterNode;1:SlaveNode;2:MonitorNode
 extern "C" u32 tslin_set_node_functiontype(const size_t ADeviceHandle, const APP_CHANNEL AChnIdx, const u8 AFunctionType);
 //Apply donwload new ldf file, which will clear the existing ldf information
@@ -1020,7 +1020,32 @@ extern "C" s32 tsdiag_can_write_data_by_identifier(int ADiagModuleIndex,u16 ADat
 extern "C" s32 tsdiag_can_read_data_by_identifier(int ADiagModuleIndex, u16 ADataIdentifier, byte* AReturnArray,
  int* AReturnArraySize,int ATimeOutMs);
 
-extern "C" s32 tscan_get_flexray_channel_count(size_t ADeviceHandle, int* ACount);
+ 
+ #ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef int TS_ReturnType;
+
+TS_ReturnType tscan_get_device_info_detail(
+    int32_t deviceIndex,
+    char** AFManufacturer,
+    char** AFProduct,
+    char** AFSerial,
+    int32_t* device_type,
+    char** device_name,
+    int32_t* can_counts,
+    bool* is_canfd,
+    int32_t* lin_counts,
+    int32_t* fr_counts,
+    int32_t* eth_counts
+);
+
+
+#ifdef __cplusplus
+}
+#endif
+ 
 
 #pragma pack()
 

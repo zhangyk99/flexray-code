@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
-project(FlexRayTestDemo)
+project(FlexRayCode)
 
 set(CMAKE_CXX_STANDARD 11)
 
 if(WIN32)
     include_directories("lib/windows")
-    link_directories("lib/windows")
+    link_directories("lib/windows/x86")
 else()
     include_directories("lib/linux")
     link_directories("lib/linux")
