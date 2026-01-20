@@ -6,11 +6,11 @@
 #define FLEXRAYTESTDEMO_FLEXRAYCONFIG_H
 
 struct ClusterConfig{
-    uint8_t ChannelAConnectedNode;
-    uint8_t ChannelBConnectedNode;
-    uint8_t ChannelASymbolTransmitted;
-    uint8_t ChannelBSymbolTransmitted;
-    uint32_t Speed;
+    uint8_t ChannelAConnectedNode;                     // Enable ChannelA: 0: Disable 1: Enable
+    uint8_t ChannelBConnectedNode;                     // Enable ChannelB: 0: Disable 1: Enable
+    uint8_t ChannelASymbolTransmitted;                 // Enable Symble Transmit function of Channel A: 0: Disable 1: Enable
+    uint8_t ChannelBSymbolTransmitted;                 // Enable Symble Transmit function of Channel B: 0: Disable 1: Enable
+    uint32_t Speed;                                    // 0 for 10m, 1 for 5m, 2 for 2.5m, convert from Database
     uint8_t ColdStartAttempts;
     uint8_t ActionPointOffset;
     uint8_t DynamicSlotIdlePhase;
@@ -28,7 +28,7 @@ struct ClusterConfig{
     uint8_t WakeUpSymbolTXIdle;
     uint8_t WakeUpSymbolTXLow;
 
-    uint8_t ListenNoise;
+    uint8_t ListenNoise;                               //2_16
     uint16_t MacroPerCycle;
     double MacroTick;
     double MaxInitializationError;
@@ -72,7 +72,7 @@ struct ECUConfig{
     uint8_t MacroInitialOffsetB;
     uint8_t MicroInitialOffsetA;
     uint8_t MircoInitialOffsetB;
-    uint8_t SingleSlotEnabled;
+    uint8_t SingleSlotEnabled;                           // FALSE_0, TRUE_1
     double MicroTick;
 };
 
