@@ -1,0 +1,81 @@
+//
+// Created by 79933 on 2026/1/27.
+//
+
+#ifndef LIBTSDEV_FLEXRAYCONFIG_H
+#define LIBTSDEV_FLEXRAYCONFIG_H
+
+#include <cstdint>
+
+struct ClusterConfig{
+    uint8_t ChannelAConnectedNode;                     // Enable ChannelA: 0: Disable 1: Enable
+    uint8_t ChannelBConnectedNode;                     // Enable ChannelB: 0: Disable 1: Enable
+    uint8_t ChannelASymbolTransmitted;                 // Enable Symble Transmit function of Channel A: 0: Disable 1: Enable
+    uint8_t ChannelBSymbolTransmitted;                 // Enable Symble Transmit function of Channel B: 0: Disable 1: Enable
+    uint32_t Speed;                                    // 0 for 10m, 1 for 5m, 2 for 2.5m, convert from Database
+    uint8_t ColdStartAttempts;
+    uint8_t ActionPointOffset;
+    uint8_t DynamicSlotIdlePhase;
+    uint8_t MiniSlot;
+    uint8_t MiniSlotActionPointOffset;
+    uint16_t NetworkIdleTime;
+    double SampleClockPeriod;
+    uint16_t StaticSlot;
+    uint8_t SymbolWindow;
+    uint16_t TimeSymbolStateTransmitter;
+
+    uint8_t WakeUpSymbolRXIdle;
+    uint8_t WakeUpSymbolRXLow;
+    uint16_t WakeUpSymbolRXWindow;
+    uint8_t WakeUpSymbolTXIdle;
+    uint8_t WakeUpSymbolTXLow;
+
+    uint8_t ListenNoise;                               //2_16
+    uint16_t MacroPerCycle;
+    double MacroTick;
+    double MaxInitializationError;
+    uint8_t MaxWithoutClockCorrectionFatal;
+    uint8_t MaxWithoutClockCorrectionPassive;
+    uint8_t NetworkManagementVectorLength;
+    uint16_t NumberOfMiniSlots;
+    uint16_t NumberOfStaticSlots;
+    uint16_t OffsetCorrectionStart;
+    uint8_t PayloadLengthStatic;
+    uint8_t SyncNodeMax;
+    uint8_t CasRXLowMax;
+    uint8_t CasRXLowMin;
+    double Bit;
+    uint32_t Cycle;
+    uint8_t ClusterDriftDamping;
+    double OffsetCorrectionMax;
+};
+
+struct ECUConfig{
+    uint8_t StartUpSync;
+    uint8_t MaxDynamicPayloadLength;
+    uint8_t ClusterDriftDamping;
+    uint8_t DecodingCorrection;
+    uint32_t ListenTimeout;
+    uint16_t MaxDrift;
+    uint8_t ExternOffsetCorrection;
+    uint8_t ExternRateCorrection;
+    uint16_t LatestTX;
+    uint32_t MicroPerCycle;
+    uint16_t OffsetCorrectionOut;
+    uint16_t RateCorrectionOut;
+    uint8_t SamplesPerMicroTick;
+    uint8_t DelayCompensationA;
+    uint8_t DelayCompensationB;
+    uint8_t WakeUpPattern;
+    uint8_t AllowHaltDueToClock;
+    uint8_t AllowPassiveToAction;
+    uint16_t AcceptedStartUpRange;
+    uint8_t MacroInitialOffsetA;
+    uint8_t MacroInitialOffsetB;
+    uint8_t MicroInitialOffsetA;
+    uint8_t MircoInitialOffsetB;
+    uint8_t SingleSlotEnabled;                           // FALSE_0, TRUE_1
+    double MicroTick;
+};
+
+#endif //LIBTSDEV_FLEXRAYCONFIG_H

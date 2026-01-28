@@ -1,0 +1,31 @@
+cmake_minimum_required(VERSION 3.14)
+project(TosunFlexrayCode)
+
+set(CAMKE_CXX_STANDARD 11)
+
+include_directories("lib/include")
+if(WIN32)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        link_directories("lib/windows/win64")
+    else()
+        link_directories("lib/windows/win32")
+    endif()
+elseif(UNIX AND NOT APPLE)
+    link_directories("lib/linux")
+endif()
+
+add_library(tosunflexray SHARED src/flexraywrapper.cpp ${SRC_FILE})
+
+add_executable(demo demo.cpp)
+add_executable(test test.cpp)
+
+if(WIN32)
+    target_link_libraries(tosunflexray PRIVATE libTSDevBase)
+    target_link_libraries(demo PRIVATE libTSDevBase)
+    target_link_libraries(test PRIVATE libTSDevBase)
+elseif(UNIX AND NOT APPLE)
+    find_package(Threads REQUIRED)
+    target_link_libraries(tosunflexray PRIVATE TSDevBase Threads::Threads dl)
+    target_link_libraries(demo PRIVATE TSDevBase Threads::Threads dl)
+    target_link_libraries(test PRIVATE TSDevBase Threads::Threads dl)
+endif()
